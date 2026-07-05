@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from database import Base, engine
 import models.user
 import models.document
+import models.forms
+import models.process
 
 app = FastAPI()
 

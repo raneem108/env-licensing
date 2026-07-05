@@ -14,3 +14,4 @@ class Document(Base):
     size = Column(Integer)
 
     user = relationship("User", back_populates="documents")
+    processes = relationship("Process", back_populates="document")

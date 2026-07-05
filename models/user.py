@@ -12,4 +12,6 @@ class User(Base):
     organization = Column(String)
 
     documents = relationship("Document", back_populates="user")
+    forms = relationship("Form", back_populates="user")
+    
 
