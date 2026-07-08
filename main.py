@@ -5,6 +5,8 @@ import models.document
 import models.forms
 import models.process
 from routes import users
+from routes import query
+
 
 
 app = FastAPI()
@@ -12,6 +14,7 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 app.include_router(users.router)
+app.include_router(query.router)
 
 @app.get("/")
 def root():
