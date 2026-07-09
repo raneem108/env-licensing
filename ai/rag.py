@@ -3,6 +3,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_ollama import OllamaLLM
 
 def process_document(pdf_path: str, collection_name: str = "regulations"):
     # Load the PDF document
@@ -44,3 +45,26 @@ def search_documents(query: str, vectorstore, top_k: int = 5):
     
     # Return the list of documents
     return results
+
+def generate_answer(question: str, chunks: list) -> str:
+    context = "\n\n".join([doc.page_content for doc in chunks])
+    
+    # Build prompt
+    prompt = f"""You are an expert on Jordanian environmental licensing regulations.
+Use the following regulation excerpts to answer the question accurately.
+If the answer is not in the excerpts, say "I could not find this in the regulations."
+
+Regulation excerpts:
+{context}
+
+Question: {question}
+
+Answer:"""
+    
+    
+     # Generate answer
+    llm = OllamaLLM(model="llama3.2")
+    answer = llm.invoke(prompt)
+
+
+    return answer

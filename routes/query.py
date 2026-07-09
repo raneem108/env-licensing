@@ -1,8 +1,9 @@
 
 
+
 from fastapi import APIRouter
 from schemas.query import QueryRequest, QueryResponse
-from ai.rag import search_documents
+from ai.rag import search_documents, generate_answer
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 
@@ -18,7 +19,14 @@ def query_documents(request: QueryRequest):
         embedding_function=embeddings,
         persist_directory="data/vectors"
     )
-    results = search_documents(request.question, vectorstore)
-    answer = " ".join([doc.page_content for doc in results])
-    sources = [doc.metadata.get("source", "Unknown") for doc in results]
+    
+    # 1. Search for chunks
+    chunks = search_documents(request.question, vectorstore)
+    
+    # 2. Generate answer from chunks using LLM
+    answer = generate_answer(request.question, chunks)
+    
+    # 3. Get sources
+    sources = [doc.metadata.get("source", "Unknown") for doc in chunks]
+    
     return QueryResponse(answer=answer, sources=sources)
