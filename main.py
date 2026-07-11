@@ -6,6 +6,8 @@ import models.forms
 import models.process
 from routes import users
 from routes import query
+from routes import compliance
+
 
 
 
@@ -15,6 +17,7 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(users.router)
 app.include_router(query.router)
+app.include_router(compliance.router)
 
 @app.get("/")
 def root():
