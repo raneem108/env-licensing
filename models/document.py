@@ -12,6 +12,9 @@ class Document(Base):
     created_at = Column(DateTime)
     approved_at = Column(DateTime)
     size = Column(Integer)
+    file_path = Column(String)
+    description = Column(String, nullable=True)
+
 
     user = relationship("User", back_populates="documents")
     processes = relationship("Process", back_populates="document")
